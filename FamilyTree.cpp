@@ -108,7 +108,7 @@ string family::Tree::relation(const string str) {
         }
     else {
             Node* n=relation_rec(this->root,str);
-            if(n==NULL) return "Unrelated";
+            if(n==NULL) return "unrelated";
             if(n->get_len()==0) return "me";
             if(n->get_len()==1)
             {
