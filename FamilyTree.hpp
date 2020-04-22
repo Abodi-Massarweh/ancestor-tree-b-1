@@ -16,9 +16,9 @@ namespace family {
         std::string m_name;
         std::size_t m_len;
         bool m_isfather;
-        bool m_isme=false;
+        bool m_isme;
     public:
-        Node( std::string name):m_name(name), m_father(NULL), m_mother(NULL), m_len(0)
+        Node( const std::string& name):m_name(name), m_father(NULL), m_mother(NULL), m_len(0),m_isfather(false),m_isme(false)
         {
 
         }
@@ -33,10 +33,10 @@ namespace family {
         /*getters*/
         Node* get_father(){ return this->m_father;}
         Node* get_mother(){ return this->m_mother;}
-        string get_name(){ return this->m_name;}
+        string& get_name(){ return this->m_name;}
         std::size_t get_len(){ return this->m_len;}
-        bool isme(){return this->m_isme;}
-        bool isfather(){ return this->m_isfather;}
+        bool& isme(){return this->m_isme;}
+        bool& isfather(){ return this->m_isfather;}
         /*setters*/
         void set_father(string str)
         {
@@ -78,39 +78,41 @@ namespace family {
 
         void remove_rec(Node *, const string);
 
-        void remove_rec_pntrToPntr(Node *&, const string);
+        bool remove_rec_pntrToPntr(Node *&, const string);
 
-        void addMother_rec(Node *n, const string son, const string mother, size_t len)/*O(n)*/
+        bool addMother_rec(Node *n, const string son, const string mother, size_t len)/*O(n)*/
         {
             if (n == NULL) {
-                return;
+                return false;
             }
             if (n->get_name() == son) /* same string*/
             {
+                if(n->m_mother!=NULL) throw "there is already a mother";
                 n->set_mother(mother);
                 n->get_mother()->set_len(len + 1);
-                return;
+                return true;
             }
 
-            addMother_rec(n->get_father(), son, mother, len + 1);
-            addMother_rec(n->get_mother(), son, mother, len + 1);
+            return addMother_rec(n->get_father(), son, mother, len + 1)
+            ||addMother_rec(n->get_mother(), son, mother, len + 1);
         }
 
-        void addFather_rec(Node *n, const string son, const string father, size_t len)/*O(n)*/
+        bool addFather_rec(Node *n, const string son, const string father, size_t len)/*O(n)*/
         {
             if (n == NULL) {
-                return;
+                return false;
             }
             if (n->get_name() == son) /* same string*/
             {
+                if(n->m_father!=NULL) throw "there is already a father";
                 n->set_father(father);
                 n->get_father()->set_len(len + 1);
                 n->get_father()->set_bool_isfather(true);
-                return;
+                return true;
             }
 
-            addFather_rec(n->get_father(), son, father, len + 1);
-            addFather_rec(n->get_mother(), son, father, len + 1);
+            return addFather_rec(n->get_father(), son, father, len + 1)
+            ||addFather_rec(n->get_mother(), son, father, len + 1);
         }
 
     public:

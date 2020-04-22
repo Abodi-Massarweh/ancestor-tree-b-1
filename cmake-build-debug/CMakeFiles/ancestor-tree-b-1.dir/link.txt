@@ -1,0 +1,1 @@
+/usr/bin/clang++-9  -g   CMakeFiles/ancestor-tree-b-1.dir/FamilyTree.cpp.o CMakeFiles/ancestor-tree-b-1.dir/Test.cpp.o CMakeFiles/ancestor-tree-b-1.dir/Test_ariel.cpp.o CMakeFiles/ancestor-tree-b-1.dir/Test_hila.cpp.o CMakeFiles/ancestor-tree-b-1.dir/TestRunner.cpp.o  -o ancestor-tree-b-1 

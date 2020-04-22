@@ -1,0 +1,3 @@
+/home/abodi/CLionProjects/ancestor-tree-b-1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/abodi/CLionProjects/ancestor-tree-b-1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/abodi/CLionProjects/ancestor-tree-b-1/cmake-build-debug/CMakeFiles/ancestor-tree-b-1.dir

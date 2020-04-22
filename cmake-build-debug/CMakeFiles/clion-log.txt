@@ -1,0 +1,4 @@
+/snap/clion/111/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/clang++-9 -G "CodeBlocks - Unix Makefiles" /home/abodi/CLionProjects/ancestor-tree-b-1
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/abodi/CLionProjects/ancestor-tree-b-1/cmake-build-debug

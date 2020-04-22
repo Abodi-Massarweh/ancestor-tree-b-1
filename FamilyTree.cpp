@@ -4,16 +4,19 @@
 
 #include <cstring>
 #include "FamilyTree.hpp"
+#include <string>
 
 family::Tree& family::Tree::addMother(const string son, const string mother)
 {
-    family::Tree::addMother_rec(this->root,son,mother,this->root->get_len());
+    bool res=family::Tree::addMother_rec(this->root,son,mother,this->root->get_len());
+    if(res== false) throw son+" doesn't exist in our tree";
     return *this;
 }
 
 family::Tree& family::Tree::addFather(const string son, const string father)
 {
-    family::Tree::addFather_rec(this->root,son,father,this->root->get_len());
+    bool res=family::Tree::addFather_rec(this->root,son,father,this->root->get_len());
+    if(res== false) throw son+" doesn't exist in our tree";
     return *this;
 }
 void family::Tree::display_rec(Node* root)
@@ -57,9 +60,24 @@ family::Node* family::Tree::find_rec(Node* n, int length, bool isfather)
 
 }
 string family::Tree::find(const string str) {
-if(str=="me") return this->root->get_name();
-if(str=="father")return this->root->get_father()->get_name();
-if(str=="mother")return this->root->get_mother()->get_name();
+    Node* res=0;
+if(str=="me") {
+   if(root!=NULL)return this->root->get_name();
+   throw"Not found";
+}
+if(str=="father"&&root->get_father()!=NULL){
+    res=find_rec(this->root, 1, true);
+    if(res!=NULL) return res->m_name;
+    throw"Not found";
+
+}
+if(str=="mother"&&root->get_mother()!=NULL){
+    res=find_rec(this->root, 1, false);
+    if(res!=NULL) return res->m_name;
+    throw"Not found";
+
+}
+if((str.find ("grandfather")==std::string::npos) &&(str.find ("grandmother")==std::string::npos)) throw "NOT FOUND";
 /* no for each one in level >=2 applies with the rule
  * length= #of('-') in string + 2 */
     int counter=0;
@@ -73,6 +91,11 @@ if(str=="mother")return this->root->get_mother()->get_name();
     }
     /*counter equals # of '-' in str !*/
     int len=2+counter;
+    if(counter==0)/*in case there is no '-' found*/
+    {
+        /*strings most be either grandfather or grandmother*/
+        if(str!="grandfather"&&str!="grandmother") throw "Not found";
+    }
     bool father=false;
     for (int j = index; j <str.length(); ++j) {
         if(str[j]=='f')
@@ -81,7 +104,9 @@ if(str=="mother")return this->root->get_mother()->get_name();
             break;
         }
     }
-    return find_rec(this->root,len,father)->get_name();
+    Node* find_result=find_rec(this->root,len,father);
+   if(find_result==NULL) throw "your target doesn't exist in out tree";
+   return find_result->m_name;
 
 }
 
@@ -89,6 +114,7 @@ family::Node* family::Tree::relation_rec(Node* n,const string target)
 {
     if(n==NULL)
     {
+
         return NULL;
     }
     if(n->get_name()==target)
@@ -104,7 +130,7 @@ family::Node* family::Tree::relation_rec(Node* n,const string target)
 string family::Tree::relation(const string str) {
     string ans;
         if (this->root == NULL) {
-            return "TREE IS EMPTY ~!";
+            return "TREE IS EMPTY !";
         }
     else {
             Node* n=relation_rec(this->root,str);
@@ -166,19 +192,23 @@ void family::Tree::remove(const string target) {
         return;
     }
     remove_rec(this->root,target);*/
-    remove_rec_pntrToPntr(this->root, target);
+    if(this->root->get_name()==target) throw "U cant delete the Root!";
+    if(remove_rec_pntrToPntr(this->root, target)== false)
+    {
+        throw "NOT FOUND";
+    }
 }
 
-void family::Tree::remove_rec_pntrToPntr(family::Node* & n, const string str)
+bool family::Tree::remove_rec_pntrToPntr(family::Node* & n, const string str)
 {
-    if(n==NULL) return;
+    if(n==NULL) return false;
     if(n->get_name()==str) {
         delete n;
         n = NULL;
 
-        return;
+        return true;
     }
-    remove_rec_pntrToPntr(n->m_father,str);
+    return remove_rec_pntrToPntr(n->m_father,str)||
     remove_rec_pntrToPntr(n->m_mother,str);
 
 }
